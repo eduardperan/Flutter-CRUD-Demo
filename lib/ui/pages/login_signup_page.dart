@@ -13,6 +13,7 @@ class LoginSignupPage extends StatefulWidget {
 
 class _LoginSignupPageState extends State<LoginSignupPage> {
   final _formKey = new GlobalKey<FormState>();
+  FocusNode focusNodeEmailInput;
 
   String _email;
   String _password;
@@ -21,6 +22,22 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
 
   bool _isLoginForm;
   bool _isLoading;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _errorMessage = "";
+    _isLoading = false;
+    _isLoginForm = true;
+    focusNodeEmailInput = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    focusNodeEmailInput.dispose();
+    super.dispose();
+  }
 
   bool validateAndSave() {
     final form = _formKey.currentState;
@@ -55,6 +72,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
 
         setState(() {
           _formKey.currentState.reset();
+          _isLoginForm = true;
         });
       } catch (e) {
         print('Error: $e');
@@ -69,14 +87,6 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     }
   }
 
-  @override
-  void initState() {
-    _errorMessage = "";
-    _isLoading = false;
-    _isLoginForm = true;
-    super.initState();
-  }
-
   void resetForm() {
     _formKey.currentState.reset();
     _errorMessage = "";
@@ -87,6 +97,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     setState(() {
       _isLoginForm = !_isLoginForm;
     });
+    focusNodeEmailInput.requestFocus();
   }
 
   @override
@@ -168,6 +179,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
       child: new TextFormField(
+        focusNode: focusNodeEmailInput,
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
@@ -221,7 +233,8 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
               validator: (value) {
                 if (value.isEmpty) {
                   return 'Confirm password can\'t be empty';
-                } else if (value.isNotEmpty && value.trim() != _confirmPassword) {
+                } else if (value.isNotEmpty &&
+                    value.trim() != _confirmPassword) {
                   return 'Password don\'t match.';
                 } else
                   return null;
