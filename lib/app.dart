@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:crud_app/pages/login_signup_page.dart';
-import 'package:crud_app/services/authentication.dart';
-import 'package:crud_app/pages/home_page.dart';
+import 'package:crud_app/ui/pages/login_signup_page.dart';
+import 'package:crud_app/core/services/authentication.dart';
+import 'package:crud_app/ui/pages/home/page.dart';
+import 'package:crud_app/constant.dart';
 
-enum AuthStatus {
-  NOT_DETERMINED,
-  NOT_LOGGED_IN,
-  LOGGED_IN,
-}
-
-class RootPage extends StatefulWidget {
-  RootPage({this.auth});
+class App extends StatefulWidget {
+  App({this.auth});
 
   final BaseAuth auth;
 
   @override
-  State<StatefulWidget> createState() => new _RootPageState();
+  State<StatefulWidget> createState() => new _AppState();
 }
 
-class _RootPageState extends State<RootPage> {
+class _AppState extends State<App> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
 

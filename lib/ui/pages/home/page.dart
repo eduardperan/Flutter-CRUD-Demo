@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:crud_app/services/authentication.dart';
+import 'package:crud_app/core/services/authentication.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:crud_app/models/todo.dart';
+import 'package:crud_app/core/models/todo.dart';
+import 'package:crud_app/ui/pages/home/list_view_item.dart';
+import 'package:crud_app/ui/pages/home/add_edit_todo_dialog.dart';
+import 'package:crud_app/constant.dart';
 import 'dart:async';
 
 class HomePage extends StatefulWidget {
@@ -18,11 +21,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Todo> _todoList;
-
+  
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  final _textEditingController = TextEditingController();
   StreamSubscription<Event> _onTodoAddedSubscription;
   StreamSubscription<Event> _onTodoChangedSubscription;
 
@@ -76,17 +78,23 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  addNewTodo(String todoItem) {
-    if (todoItem.length > 0) {
-      Todo todo = new Todo(todoItem.toString(), widget.userId, false);
-      _database.reference().child("todo").push().set(todo.toJson());
+  Future createNewTodo(String subject) async {
+    if (subject.length <= 0) return;
+    try {     
+      Todo todo = new Todo(subject.toString(), widget.userId, false);
+      await _database.reference().child("todo").push().set(todo.toJson());    
+    } catch (e) {
+      print(e);
     }
   }
 
-  toggleComplete(Todo todo) {
+  toggleComplete(Todo todo) async {
     todo.completed = !todo.completed;
-    if (todo != null) {
-      _database.reference().child("todo").child(todo.key).set(todo.toJson());
+    if (todo == null) return;
+    try {
+      await _database.reference().child("todo").child(todo.key).set(todo.toJson());
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -103,37 +111,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   showAddTodoDialog(BuildContext context) async {
-    _textEditingController.clear();
     await showDialog<String>(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            content: new Row(
-              children: <Widget>[
-                new Expanded(
-                    child: new TextField(
-                  controller: _textEditingController,
-                  autofocus: true,
-                  decoration: new InputDecoration(
-                    labelText: 'Add new todo',
-                  ),
-                ))
-              ],
-            ),
-            actions: <Widget>[
-              new FlatButton(
-                  child: const Text('Cancel'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
-              new FlatButton(
-                  child: const Text('Save'),
-                  onPressed: () {
-                    addNewTodo(_textEditingController.text.toString());
-                    Navigator.pop(context);
-                  })
-            ],
-          );
+          return AddEditTodoDialog(addNewTodoCallback: createNewTodo, dialogMode: ManageTodoDialogMode.ADD);
         });
   }
 
@@ -143,33 +124,8 @@ class _HomePageState extends State<HomePage> {
           shrinkWrap: true,
           itemCount: _todoList.length,
           itemBuilder: (BuildContext context, int index) {
-            String todoId = _todoList[index].key;
-            String subject = _todoList[index].subject;
-            bool completed = _todoList[index].completed;
-            return Dismissible(
-              key: Key(todoId),
-              background: Container(color: Colors.red),
-              onDismissed: (direction) async {
-                deleteTodo(todoId, index);
-              },
-              child: ListTile(
-                title: Text(
-                  subject,
-                  style: TextStyle(fontSize: 20.0),
-                ),
-                trailing: IconButton(
-                    icon: (completed)
-                        ? Icon(
-                            Icons.done_outline,
-                            color: Colors.green,
-                            size: 20.0,
-                          )
-                        : Icon(Icons.done, color: Colors.grey, size: 20.0),
-                    onPressed: () {
-                      toggleComplete(_todoList[index]);
-                    }),
-              ),
-            );
+            Todo todo = _todoList[index];
+            return ListViewItem(todo, index, toggleComplete, deleteTodo);
           });
     } else {
       return Center(
@@ -185,7 +141,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text('Flutter login demo'),
+          title: new Text('Flutter todo list Demo'),
           actions: <Widget>[
             new FlatButton(
                 child: new Text('Logout',
