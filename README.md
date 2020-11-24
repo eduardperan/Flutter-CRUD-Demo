@@ -1,4 +1,4 @@
-# crud_app
+# CRUD Application
 
 A new Flutter project.
 Sample login and CRUD application powered by Firebase Real Time Database.
