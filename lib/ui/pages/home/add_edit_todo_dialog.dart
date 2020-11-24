@@ -6,12 +6,14 @@ class AddEditTodoDialog extends StatefulWidget {
       {Key key,
       this.addNewTodoCallback,
       this.editTodoSubjectCallback,
-      this.dialogMode})
+      this.dialogMode,
+      this.subject})
       : super(key: key);
 
   final Future Function(String subject) addNewTodoCallback;
   final Future Function(String subject) editTodoSubjectCallback;
   final ManageTodoDialogMode dialogMode;
+  final String subject;
 
   @override
   State<StatefulWidget> createState() => new _AddEditTodoDialogState();
@@ -23,6 +25,7 @@ class _AddEditTodoDialogState extends State<AddEditTodoDialog> {
   @override
   Widget build(BuildContext context) {
     _textEditingController.clear();
+    _textEditingController.value = TextEditingValue(text: widget.subject);
     return AlertDialog(
         content: new Row(
           children: <Widget>[
@@ -50,21 +53,23 @@ class _AddEditTodoDialogState extends State<AddEditTodoDialog> {
           }),
       new FlatButton(
           child: const Text('Save'),
-          onPressed: () async {
-            await addEditTodo();
-            Navigator.pop(context);
+          onPressed: () {
+            addEditTodo();
           })
     ];
   }
 
-  Future addEditTodo() async {
+  void addEditTodo() async {
     try {
       String todoSubject = _textEditingController.text.toString();
+      if (todoSubject.length <= 0) return;
       if (widget.dialogMode == ManageTodoDialogMode.ADD) {
         await widget.addNewTodoCallback(todoSubject);
       } else {
         await widget.editTodoSubjectCallback(todoSubject);
       }
+      _textEditingController.clear();
+      Navigator.pop(context);
     } catch (e) {
       print(e);
     }

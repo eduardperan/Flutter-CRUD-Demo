@@ -1,26 +1,25 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:crud_app/core/models/todo.dart';
 import 'package:crud_app/constant.dart';
 import 'package:crud_app/ui/pages/home/add_edit_todo_dialog.dart';
 
 class ListViewItem extends StatelessWidget {
-  final void Function(Todo todo) _toggleComplete;
-  final void Function(String key, int index) _deleteTodo;
+  final void Function(Todo todo) _toggleCompleteCallBack;
+  final void Function(String todoId, int index) _deleteTodoCallBack;
+  final Future Function(String todoId, String subject) _updateTodoSubjectCallBack;
   final Todo _todo;
   final int _index;
 
-  ListViewItem(this._todo, this._index, this._toggleComplete, this._deleteTodo);
-
-  final FirebaseDatabase _database = FirebaseDatabase.instance;
+  ListViewItem(this._todo, this._index, this._toggleCompleteCallBack, this._deleteTodoCallBack,
+      this._updateTodoSubjectCallBack);
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
         key: Key(_todo.key),
         background: Container(color: Colors.red),
-        onDismissed: (direction) async {
-          _deleteTodo(_todo.key, _index);
+        onDismissed: (direction) {
+          _deleteTodoCallBack(_todo.key, _index);
         },
         child: ListTile(
           title: Text(
@@ -48,7 +47,7 @@ class ListViewItem extends StatelessWidget {
                         )
                       : Icon(Icons.done, color: Colors.grey, size: 20.0),
                   onPressed: () {
-                    _toggleComplete(_todo);
+                    _toggleCompleteCallBack(_todo);
                   }),
             ],
           ),
@@ -56,17 +55,7 @@ class ListViewItem extends StatelessWidget {
   }
 
   Future updateTodoSubject(String subject) async {
-    print(subject);
-    if (subject.length <= 0) return;
-    try {
-      await _database
-          .reference()
-          .child("todo")
-          .child(_todo.key)
-          .update({'subject': subject});
-    } catch (e) {
-      print(e);
-    }
+    await _updateTodoSubjectCallBack(_todo.key, subject);
   }
 
   showAddTodoDialog(BuildContext context) async {
@@ -75,7 +64,8 @@ class ListViewItem extends StatelessWidget {
         builder: (BuildContext context) {
           return AddEditTodoDialog(
               editTodoSubjectCallback: updateTodoSubject,
-              dialogMode: ManageTodoDialogMode.EDIT);
+              dialogMode: ManageTodoDialogMode.EDIT,
+              subject: _todo.subject);
         });
   }
 }

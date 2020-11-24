@@ -21,7 +21,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Todo> _todoList;
-  
+
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -79,18 +79,36 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future createNewTodo(String subject) async {
-    if (subject.length <= 0) return;
-    try {     
-      Todo todo = new Todo(subject.toString(), widget.userId, false);
-      await _database.reference().child("todo").push().set(todo.toJson());    
-    } catch (e) {
-      print(e);
-    }
+    String userId = widget.userId;
+
+    if (userId.length <= 0) 
+      throw Exception('User is required.');
+    
+    if (subject.length <= 0) 
+      throw Exception('Todo subject is required.');
+    
+    Todo todo = new Todo(subject, userId, false);
+    await _database.reference().child("todo").push().set(todo.toJson());
+  }
+
+  Future updateTodoSubject(String todoId, String subject) async {
+
+    if (todoId.length <= 0) 
+      throw Exception('Todo id is required.');
+    
+    if (subject.length <= 0) 
+      throw Exception('Todo subject is required.');
+
+    await _database
+        .reference()
+        .child("todo")
+        .child(todoId)
+        .update({'subject': subject});
   }
 
   toggleComplete(Todo todo) async {
-    todo.completed = !todo.completed;
-    if (todo == null) return;
+    todo.completed = !todo.completed;   
+    if (todo == null) throw Exception('Todo is required.');
     try {
       await _database.reference().child("todo").child(todo.key).set(todo.toJson());
     } catch (e) {
@@ -99,6 +117,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   deleteTodo(String todoId, int index) async {
+
+    if (todoId.length <= 0) 
+      throw Exception('Todo id is required.');
+    
+    if (index < 0 || index == null) 
+      throw Exception('Todo index is required.');
+
     try {
       await _database.reference().child("todo").child(todoId).remove();
       print("Delete $todoId successful");
@@ -114,7 +139,9 @@ class _HomePageState extends State<HomePage> {
     await showDialog<String>(
         context: context,
         builder: (BuildContext context) {
-          return AddEditTodoDialog(addNewTodoCallback: createNewTodo, dialogMode: ManageTodoDialogMode.ADD);
+          return AddEditTodoDialog(
+              addNewTodoCallback: createNewTodo,
+              dialogMode: ManageTodoDialogMode.ADD);
         });
   }
 
@@ -125,7 +152,8 @@ class _HomePageState extends State<HomePage> {
           itemCount: _todoList.length,
           itemBuilder: (BuildContext context, int index) {
             Todo todo = _todoList[index];
-            return ListViewItem(todo, index, toggleComplete, deleteTodo);
+            return ListViewItem(
+                todo, index, toggleComplete, deleteTodo, updateTodoSubject);
           });
     } else {
       return Center(
