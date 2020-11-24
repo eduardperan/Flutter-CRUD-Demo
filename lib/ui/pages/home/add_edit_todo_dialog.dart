@@ -10,8 +10,8 @@ class AddEditTodoDialog extends StatefulWidget {
       this.subject})
       : super(key: key);
 
-  final Future Function(String subject) addNewTodoCallback;
-  final Future Function(String subject) editTodoSubjectCallback;
+  final Future<void> Function(String subject) addNewTodoCallback;
+  final Future<void> Function(String subject) editTodoSubjectCallback;
   final ManageTodoDialogMode dialogMode;
   final String subject;
 
@@ -25,7 +25,8 @@ class _AddEditTodoDialogState extends State<AddEditTodoDialog> {
   @override
   Widget build(BuildContext context) {
     _textEditingController.clear();
-    _textEditingController.value = TextEditingValue(text: widget.subject);
+    if(widget.dialogMode == ManageTodoDialogMode.EDIT)
+      _textEditingController.value = TextEditingValue(text: widget.subject);
     return AlertDialog(
         content: new Row(
           children: <Widget>[

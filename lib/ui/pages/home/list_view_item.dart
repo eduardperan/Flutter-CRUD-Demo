@@ -6,7 +6,7 @@ import 'package:crud_app/ui/pages/home/add_edit_todo_dialog.dart';
 class ListViewItem extends StatelessWidget {
   final void Function(Todo todo) _toggleCompleteCallBack;
   final void Function(String todoId, int index) _deleteTodoCallBack;
-  final Future Function(String todoId, String subject) _updateTodoSubjectCallBack;
+  final Future<void> Function(String todoId, String subject) _updateTodoSubjectCallBack;
   final Todo _todo;
   final int _index;
 
@@ -54,7 +54,7 @@ class ListViewItem extends StatelessWidget {
         ));
   }
 
-  Future updateTodoSubject(String subject) async {
+  Future<void> updateTodoSubject(String subject) async {
     await _updateTodoSubjectCallBack(_todo.key, subject);
   }
 

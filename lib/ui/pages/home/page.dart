@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future createNewTodo(String subject) async {
+  Future<void> createNewTodo(String subject) async {
     String userId = widget.userId;
 
     if (userId.length <= 0) 
@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
     await _database.reference().child("todo").push().set(todo.toJson());
   }
 
-  Future updateTodoSubject(String todoId, String subject) async {
+  Future<void> updateTodoSubject(String todoId, String subject) async {
 
     if (todoId.length <= 0) 
       throw Exception('Todo id is required.');
