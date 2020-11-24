@@ -1,6 +1,7 @@
 # crud_app
 
 A new Flutter project.
+Sample login and CRUD application powered by Firebase Real Time Database.
 
 ## Getting Started
 
@@ -14,3 +15,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## Special thanks to the author of this blog
+
+[https://medium.com/@tattwei46/flutter-how-to-do-user-login-with-firebase-a6af760b14d5](https://medium.com/@tattwei46/flutter-how-to-do-user-login-with-firebase-a6af760b14d5)
