@@ -42,10 +42,10 @@ class _AddEditTodoDialogState extends State<AddEditTodoDialog> {
             ))
           ],
         ),
-        actions: getActionsWidgets());
+        actions: getActionsWidgets(context));
   }
 
-  List<Widget> getActionsWidgets() {
+  List<Widget> getActionsWidgets(BuildContext context) {
     return <Widget>[
       new FlatButton(
           child: const Text('Cancel'),
