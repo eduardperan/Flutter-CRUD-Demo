@@ -35,11 +35,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _todoList = new List();
-    _todoQuery = _database
-        .reference()
-        .child("todo")
-        .orderByChild("userId")
-        .equalTo(widget.userId);
+    _todoQuery = _database.reference().child("todo").child(widget.userId);
     _onTodoAddedSubscription = _todoQuery.onChildAdded.listen(onEntryAdded);
     _onTodoChangedSubscription =
         _todoQuery.onChildChanged.listen(onEntryChanged);
@@ -85,8 +81,13 @@ class _HomePageState extends State<HomePage> {
 
     if (subject.length <= 0) throw Exception('Todo subject is required.');
 
-    Todo todo = new Todo(subject, userId, false);
-    await _database.reference().child("todo").push().set(todo.toJson());
+    Todo todo = new Todo(subject, false);
+    await _database
+        .reference()
+        .child("todo")
+        .child(widget.userId)
+        .push()
+        .set(todo.toJson());
   }
 
   Future<void> updateTodoSubject(String todoId, String subject) async {
@@ -97,6 +98,7 @@ class _HomePageState extends State<HomePage> {
     await _database
         .reference()
         .child("todo")
+        .child(widget.userId)
         .child(todoId)
         .update({'subject': subject});
   }
@@ -108,6 +110,7 @@ class _HomePageState extends State<HomePage> {
       await _database
           .reference()
           .child("todo")
+          .child(widget.userId)
           .child(todo.key)
           .set(todo.toJson());
     } catch (e) {
@@ -121,7 +124,12 @@ class _HomePageState extends State<HomePage> {
     if (index < 0 || index == null) throw Exception('Todo index is required.');
 
     try {
-      await _database.reference().child("todo").child(todoId).remove();
+      await _database
+          .reference()
+          .child("todo")
+          .child(widget.userId)
+          .child(todoId)
+          .remove();
       print("Delete $todoId successful");
       setState(() {
         _todoList.removeAt(index);
