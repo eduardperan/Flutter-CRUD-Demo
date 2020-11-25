@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:crud_app/core/services/authentication.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:crud_app/core/models/todo.dart';
-import 'package:crud_app/ui/pages/home/list_view_item.dart';
-import 'package:crud_app/ui/pages/home/add_edit_todo_dialog.dart';
+import 'list_view_item.dart';
+import 'add_edit_todo_dialog.dart';
 import 'package:crud_app/constant.dart';
 import 'dart:async';
 
@@ -81,23 +81,18 @@ class _HomePageState extends State<HomePage> {
   Future<void> createNewTodo(String subject) async {
     String userId = widget.userId;
 
-    if (userId.length <= 0) 
-      throw Exception('User is required.');
-    
-    if (subject.length <= 0) 
-      throw Exception('Todo subject is required.');
-    
+    if (userId.length <= 0) throw Exception('User is required.');
+
+    if (subject.length <= 0) throw Exception('Todo subject is required.');
+
     Todo todo = new Todo(subject, userId, false);
     await _database.reference().child("todo").push().set(todo.toJson());
   }
 
   Future<void> updateTodoSubject(String todoId, String subject) async {
+    if (todoId.length <= 0) throw Exception('Todo id is required.');
 
-    if (todoId.length <= 0) 
-      throw Exception('Todo id is required.');
-    
-    if (subject.length <= 0) 
-      throw Exception('Todo subject is required.');
+    if (subject.length <= 0) throw Exception('Todo subject is required.');
 
     await _database
         .reference()
@@ -107,22 +102,23 @@ class _HomePageState extends State<HomePage> {
   }
 
   toggleComplete(Todo todo) async {
-    todo.completed = !todo.completed;   
+    todo.completed = !todo.completed;
     if (todo == null) throw Exception('Todo is required.');
     try {
-      await _database.reference().child("todo").child(todo.key).set(todo.toJson());
+      await _database
+          .reference()
+          .child("todo")
+          .child(todo.key)
+          .set(todo.toJson());
     } catch (e) {
       print(e);
     }
   }
 
   deleteTodo(String todoId, int index) async {
+    if (todoId.length <= 0) throw Exception('Todo id is required.');
 
-    if (todoId.length <= 0) 
-      throw Exception('Todo id is required.');
-    
-    if (index < 0 || index == null) 
-      throw Exception('Todo index is required.');
+    if (index < 0 || index == null) throw Exception('Todo index is required.');
 
     try {
       await _database.reference().child("todo").child(todoId).remove();

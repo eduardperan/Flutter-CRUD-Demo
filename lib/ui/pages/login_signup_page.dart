@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:crud_app/core/services/authentication.dart';
+import 'package:crud_app/ui/widgets/circular_progress.dart';
 
 class LoginSignupPage extends StatefulWidget {
   LoginSignupPage({this.auth, this.loginCallback});
@@ -109,19 +110,9 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
         body: Stack(
           children: <Widget>[
             _showForm(),
-            _showCircularProgress(),
+            CircularProgress(_isLoading),
           ],
         ));
-  }
-
-  Widget _showCircularProgress() {
-    if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
-    }
-    return Container(
-      height: 0.0,
-      width: 0.0,
-    );
   }
 
   Widget _showForm() {

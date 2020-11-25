@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:crud_app/ui/pages/login_signup_page.dart';
 import 'package:crud_app/core/services/authentication.dart';
-import 'package:crud_app/ui/pages/home/page.dart';
+import 'package:crud_app/ui/pages/home/home.dart';
 import 'package:crud_app/constant.dart';
 
 class App extends StatefulWidget {
