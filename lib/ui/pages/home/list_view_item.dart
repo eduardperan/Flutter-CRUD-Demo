@@ -65,7 +65,7 @@ class ListViewItem extends StatelessWidget {
           return AddEditTodoDialog(
               editTodoSubjectCallback: updateTodoSubject,
               dialogMode: ManageTodoDialogMode.EDIT,
-              subject: _todo.subject);
+              todo: _todo);
         });
   }
 }
