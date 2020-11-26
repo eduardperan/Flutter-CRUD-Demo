@@ -1,21 +1,8 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'package:crud_app/core/models/data.dart';
+import 'package:crud_app/core/models/field.dart';
+import 'package:crud_app/constant.dart';
 
-class Todo {
-  String key;
-  String subject;
-  bool completed;
-
-  Todo(this.subject, this.completed);
-
-  Todo.fromSnapshot(DataSnapshot snapshot)
-      : key = snapshot.key,
-        subject = snapshot.value['subject'],
-        completed = snapshot.value['completed'];
-
-  toJson() {
-    return {
-      'subject': subject,
-      'completed': completed,
-    };
-  }
+class Todo extends Data {
+  Todo() :
+    super([Field('subject', FieldType.STRING), Field('completed', FieldType.BOOLEAN)]);
 }

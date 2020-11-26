@@ -6,24 +6,27 @@ import 'package:crud_app/ui/pages/home/add_edit_todo_dialog.dart';
 class ListViewItem extends StatelessWidget {
   final void Function(Todo todo) _toggleCompleteCallBack;
   final void Function(String todoId, int index) _deleteTodoCallBack;
-  final Future<void> Function(String todoId, String subject) _updateTodoSubjectCallBack;
+  final Future<void> Function(Todo todo) _updateTodoSubjectCallBack;
   final Todo _todo;
   final int _index;
 
-  ListViewItem(this._todo, this._index, this._toggleCompleteCallBack, this._deleteTodoCallBack,
-      this._updateTodoSubjectCallBack);
+  ListViewItem(this._todo, this._index, this._toggleCompleteCallBack,
+      this._deleteTodoCallBack, this._updateTodoSubjectCallBack);
 
   @override
   Widget build(BuildContext context) {
+    var key = _todo.get('key').toString();
+    var subject = _todo.get('subject').toString();
+    var completed = _todo.get('completed');
     return Dismissible(
-        key: Key(_todo.key),
+        key: Key(key),
         background: Container(color: Colors.red),
         onDismissed: (direction) {
-          _deleteTodoCallBack(_todo.key, _index);
+          _deleteTodoCallBack(key, _index);
         },
         child: ListTile(
           title: Text(
-            _todo.subject,
+            subject,
             style: TextStyle(fontSize: 20.0),
           ),
           trailing: Wrap(
@@ -39,7 +42,7 @@ class ListViewItem extends StatelessWidget {
                     showAddTodoDialog(context);
                   }),
               IconButton(
-                  icon: (_todo.completed)
+                  icon: completed
                       ? Icon(
                           Icons.done_outline,
                           color: Colors.green,
@@ -54,8 +57,8 @@ class ListViewItem extends StatelessWidget {
         ));
   }
 
-  Future<void> updateTodoSubject(String subject) async {
-    await _updateTodoSubjectCallBack(_todo.key, subject);
+  Future<void> updateTodoSubject(Todo todo) async {
+    await _updateTodoSubjectCallBack(todo);
   }
 
   showAddTodoDialog(BuildContext context) async {

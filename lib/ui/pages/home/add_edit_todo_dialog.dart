@@ -11,8 +11,8 @@ class AddEditTodoDialog extends StatefulWidget {
       this.todo})
       : super(key: key);
 
-  final Future<void> Function(String subject) addNewTodoCallback;
-  final Future<void> Function(String subject) editTodoSubjectCallback;
+  final Future<void> Function(Todo todo) addNewTodoCallback;
+  final Future<void> Function(Todo todo) editTodoSubjectCallback;
   final ManageTodoDialogMode dialogMode;
   final Todo todo;
 
@@ -22,19 +22,23 @@ class AddEditTodoDialog extends StatefulWidget {
 
 class _AddEditTodoDialogState extends State<AddEditTodoDialog> {
   List<TextEditingController> _textEditingControllers;
+  Todo _todo;
+  bool _isEditMode;
 
   @override
   void initState() {
     super.initState();
     _textEditingControllers = new List();
+    _isEditMode = widget.dialogMode == ManageTodoDialogMode.EDIT ? true : false;
+    Todo todo = new Todo();
+    todo.set('completed', false);
+    _todo = _isEditMode ? widget.todo : todo;
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        title: Text(widget.dialogMode == ManageTodoDialogMode.ADD
-            ? 'Add new Todo'
-            : 'Edit Todo'),
+        title: Text(_isEditMode ? 'Add new Todo' : 'Edit Todo'),
         content: new Wrap(children: getTextInputsWidgets(context)),
         actions: getActionsWidgets(context));
   }
@@ -56,19 +60,28 @@ class _AddEditTodoDialogState extends State<AddEditTodoDialog> {
 
   List<Widget> getTextInputsWidgets(BuildContext context) {
     List<Widget> listTextInput = new List();
-    var textEditingController = TextEditingController();
+    TextEditingController textEditingController;
 
-    textEditingController.clear();
-    if (widget.dialogMode == ManageTodoDialogMode.EDIT) textEditingController.value = TextEditingValue(text: widget.todo.subject);
+    _todo.getFields().forEach((field) {
+      if (field.name == 'key' || field.type == FieldType.BOOLEAN) return;
 
-    listTextInput
-        .add(createInputTextWidget(textEditingController, 'Enter Subject'));
-    _textEditingControllers.add(textEditingController);
+      textEditingController = new TextEditingController();
+
+      if (_isEditMode)
+        textEditingController.value =
+            TextEditingValue(text: _todo.get(field.name).toString());
+
+      listTextInput.add(createInputTextWidget(textEditingController,
+          'Enter ' + field.name, (value) => _todo.set(field.name, value)));
+
+      _textEditingControllers.add(textEditingController);
+    });
+
     return listTextInput;
   }
 
-  Widget createInputTextWidget(
-      TextEditingController textEditingController, String label) {
+  Widget createInputTextWidget(TextEditingController textEditingController,
+      String label, onChangeCallBack) {
     return new Row(
       children: [
         new Expanded(
@@ -76,6 +89,7 @@ class _AddEditTodoDialogState extends State<AddEditTodoDialog> {
           controller: textEditingController,
           autofocus: true,
           decoration: new InputDecoration(labelText: label),
+          onChanged: onChangeCallBack,
         )),
       ],
     );
@@ -83,14 +97,11 @@ class _AddEditTodoDialogState extends State<AddEditTodoDialog> {
 
   void addEditTodo() async {
     try {
-      String todoSubject = _textEditingControllers[0].text.toString();
-      if (todoSubject.length <= 0) return;
-      if (widget.dialogMode == ManageTodoDialogMode.ADD) {
-        await widget.addNewTodoCallback(todoSubject);
+      if (!_isEditMode) {
+        await widget.addNewTodoCallback(_todo);
       } else {
-        await widget.editTodoSubjectCallback(todoSubject);
+        await widget.editTodoSubjectCallback(_todo);
       }
-      _textEditingControllers[0].clear();
       Navigator.pop(context);
     } catch (e) {
       print(e);

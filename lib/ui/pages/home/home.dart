@@ -50,18 +50,23 @@ class _HomePageState extends State<HomePage> {
 
   onEntryChanged(Event event) {
     var oldEntry = _todoList.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
+      return entry.get('key') == event.snapshot.key;
     });
 
+    Todo todo = new Todo();
+    todo.fromSnapshot(event.snapshot);
+
     setState(() {
-      _todoList[_todoList.indexOf(oldEntry)] =
-          Todo.fromSnapshot(event.snapshot);
+      _todoList[_todoList.indexOf(oldEntry)] = todo;
     });
   }
 
   onEntryAdded(Event event) {
+    Todo todo = new Todo();
+    todo.fromSnapshot(event.snapshot);
+
     setState(() {
-      _todoList.add(Todo.fromSnapshot(event.snapshot));
+      _todoList.add(todo);
     });
   }
 
@@ -74,14 +79,11 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> createNewTodo(String subject) async {
+  Future<void> createNewTodo(Todo todo) async {
     String userId = widget.userId;
 
     if (userId.length <= 0) throw Exception('User is required.');
 
-    if (subject.length <= 0) throw Exception('Todo subject is required.');
-
-    Todo todo = new Todo(subject, false);
     await _database
         .reference()
         .child("todo")
@@ -90,47 +92,45 @@ class _HomePageState extends State<HomePage> {
         .set(todo.toJson());
   }
 
-  Future<void> updateTodoSubject(String todoId, String subject) async {
-    if (todoId.length <= 0) throw Exception('Todo id is required.');
-
-    if (subject.length <= 0) throw Exception('Todo subject is required.');
+  Future<void> updateTodoSubject(Todo todo) async {
+    if (!(todo is Todo)) throw Exception('Not found.');
 
     await _database
         .reference()
         .child("todo")
         .child(widget.userId)
-        .child(todoId)
-        .update({'subject': subject});
+        .child(todo.get('key'))
+        .update(todo.toJson());
   }
 
   toggleComplete(Todo todo) async {
-    todo.completed = !todo.completed;
+    todo.set('completed', !todo.get('completed'));
     if (todo == null) throw Exception('Todo is required.');
     try {
       await _database
           .reference()
           .child("todo")
           .child(widget.userId)
-          .child(todo.key)
+          .child(todo.get('key'))
           .set(todo.toJson());
     } catch (e) {
       print(e);
     }
   }
 
-  deleteTodo(String todoId, int index) async {
-    if (todoId.length <= 0) throw Exception('Todo id is required.');
+  deleteTodo(String key, int index) async {
+    if (key.length <= 0) throw Exception('Not found.');
 
-    if (index < 0 || index == null) throw Exception('Todo index is required.');
+    if (index < 0 || index == null) throw Exception('Index is required.');
 
     try {
       await _database
           .reference()
           .child("todo")
           .child(widget.userId)
-          .child(todoId)
+          .child(key)
           .remove();
-      print("Delete $todoId successful");
+      print("Delete $key successful");
       setState(() {
         _todoList.removeAt(index);
       });

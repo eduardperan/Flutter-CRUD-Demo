@@ -8,3 +8,11 @@ enum ManageTodoDialogMode {
   EDIT,
   ADD,
 }
+
+enum FieldType {
+  STRING,
+  NUMBER,
+  BOOLEAN,
+  DATE,
+  LIST
+}
