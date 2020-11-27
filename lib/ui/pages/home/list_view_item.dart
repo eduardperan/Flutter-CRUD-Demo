@@ -7,12 +7,12 @@ import 'package:crud_app/ui/widgets/view_details_dialog.dart';
 class ListViewItem extends StatelessWidget {
   final void Function(Todo todo) _toggleCompleteCallBack;
   final void Function(String todoId, int index) _deleteTodoCallBack;
-  final Future<void> Function(Todo todo) _updateTodoSubjectCallBack;
+  final Future<void> Function(Todo todo) _updateTodoCallBack;
   final Todo _todo;
   final int _index;
 
   ListViewItem(this._todo, this._index, this._toggleCompleteCallBack,
-      this._deleteTodoCallBack, this._updateTodoSubjectCallBack);
+      this._deleteTodoCallBack, this._updateTodoCallBack);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class ListViewItem extends StatelessWidget {
             style: TextStyle(fontSize: 20.0),
           ),
           trailing: Wrap(
-            spacing: 8, // space between two icons
+            spacing: 8,
             children: <Widget>[
               IconButton(
                   icon: Icon(
@@ -67,8 +67,8 @@ class ListViewItem extends StatelessWidget {
         ));
   }
 
-  Future<void> updateTodoSubject(Todo todo) async {
-    await _updateTodoSubjectCallBack(todo);
+  Future<void> updateTodo(Todo todo) async {
+    await _updateTodoCallBack(todo);
   }
 
   showEditTodoDialog(BuildContext context) async {
@@ -76,7 +76,7 @@ class ListViewItem extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return AddEditTodoDialog(
-              editTodoSubjectCallback: updateTodoSubject,
+              editTodoCallback: updateTodo,
               dialogMode: ManageTodoDialogMode.EDIT,
               todo: _todo);
         });

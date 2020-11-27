@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
         .set(todo.toJson());
   }
 
-  Future<void> updateTodoSubject(Todo todo) async {
+  Future<void> updateTodo(Todo todo) async {
     if (!(todo is Todo)) throw Exception('Not found.');
 
     await _database
@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
           itemBuilder: (BuildContext context, int index) {
             Todo todo = _todoList[index];
             return ListViewItem(
-                todo, index, toggleComplete, deleteTodo, updateTodoSubject);
+                todo, index, toggleComplete, deleteTodo, updateTodo);
           });
     } else {
       return Center(

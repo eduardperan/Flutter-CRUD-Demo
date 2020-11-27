@@ -6,13 +6,13 @@ class AddEditTodoDialog extends StatefulWidget {
   AddEditTodoDialog(
       {Key key,
       this.addNewTodoCallback,
-      this.editTodoSubjectCallback,
+      this.editTodoCallback,
       this.dialogMode,
       this.todo})
       : super(key: key);
 
   final Future<void> Function(Todo todo) addNewTodoCallback;
-  final Future<void> Function(Todo todo) editTodoSubjectCallback;
+  final Future<void> Function(Todo todo) editTodoCallback;
   final ManageTodoDialogMode dialogMode;
   final Todo todo;
 
@@ -100,7 +100,7 @@ class _AddEditTodoDialogState extends State<AddEditTodoDialog> {
       if (!_isEditMode) {
         await widget.addNewTodoCallback(_todo);
       } else {
-        await widget.editTodoSubjectCallback(_todo);
+        await widget.editTodoCallback(_todo);
       }
       Navigator.pop(context);
     } catch (e) {
