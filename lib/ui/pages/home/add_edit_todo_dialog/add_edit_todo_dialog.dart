@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:crud_app/constant.dart';
 import 'package:crud_app/core/models/todo.dart';
+import './widgets/edit_text_field.dart';
 
 class AddEditTodoDialog extends StatefulWidget {
   AddEditTodoDialog(
@@ -63,36 +64,21 @@ class _AddEditTodoDialogState extends State<AddEditTodoDialog> {
     TextEditingController textEditingController;
 
     _todo.getFields().forEach((field) {
-      if (field.name == 'key' || field.type == FieldType.BOOLEAN) return;
+      if (field.name == 'key') return;
 
-      textEditingController = new TextEditingController();
-
-      if (_isEditMode)
+      if (field.type == FieldType.STRING) {
+        textEditingController = new TextEditingController();
+        if (_isEditMode)
         textEditingController.value =
             TextEditingValue(text: _todo.get(field.name).toString());
 
-      listTextInput.add(createInputTextWidget(textEditingController,
-          'Enter ' + field.name, (value) => _todo.set(field.name, value)));
+        listTextInput.add(new EditTextField(textEditingController, 'Enter ' + field.name, (value) => _todo.set(field.name, value)));
+      }
 
       _textEditingControllers.add(textEditingController);
     });
 
     return listTextInput;
-  }
-
-  Widget createInputTextWidget(TextEditingController textEditingController,
-      String label, onChangeCallBack) {
-    return new Row(
-      children: [
-        new Expanded(
-            child: new TextField(
-          controller: textEditingController,
-          autofocus: true,
-          decoration: new InputDecoration(labelText: label),
-          onChanged: onChangeCallBack,
-        )),
-      ],
-    );
   }
 
   void addEditTodo() async {

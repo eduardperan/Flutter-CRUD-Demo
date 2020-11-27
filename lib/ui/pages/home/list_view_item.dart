@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:crud_app/core/models/todo.dart';
 import 'package:crud_app/constant.dart';
-import 'package:crud_app/ui/pages/home/add_edit_todo_dialog.dart';
+import 'package:crud_app/ui/pages/home/add_edit_todo_dialog/add_edit_todo_dialog.dart';
 import 'package:crud_app/ui/widgets/view_details_dialog.dart';
 
 class ListViewItem extends StatelessWidget {
