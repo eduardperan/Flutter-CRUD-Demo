@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:crud_app/core/models/todo.dart';
 import 'package:crud_app/constant.dart';
 import 'package:crud_app/ui/pages/home/add_edit_todo_dialog.dart';
+import 'package:crud_app/ui/widgets/view_details_dialog.dart';
 
 class ListViewItem extends StatelessWidget {
   final void Function(Todo todo) _toggleCompleteCallBack;
@@ -34,12 +35,21 @@ class ListViewItem extends StatelessWidget {
             children: <Widget>[
               IconButton(
                   icon: Icon(
+                    Icons.view_list,
+                    color: Colors.black,
+                    size: 20.0,
+                  ),
+                  onPressed: () {
+                    showViewdDetailsDialog(context);
+                  }),
+              IconButton(
+                  icon: Icon(
                     Icons.edit,
                     color: Colors.green,
                     size: 20.0,
                   ),
                   onPressed: () {
-                    showAddTodoDialog(context);
+                    showEditTodoDialog(context);
                   }),
               IconButton(
                   icon: completed
@@ -61,7 +71,7 @@ class ListViewItem extends StatelessWidget {
     await _updateTodoSubjectCallBack(todo);
   }
 
-  showAddTodoDialog(BuildContext context) async {
+  showEditTodoDialog(BuildContext context) async {
     await showDialog<String>(
         context: context,
         builder: (BuildContext context) {
@@ -69,6 +79,14 @@ class ListViewItem extends StatelessWidget {
               editTodoSubjectCallback: updateTodoSubject,
               dialogMode: ManageTodoDialogMode.EDIT,
               todo: _todo);
+        });
+  }
+
+  showViewdDetailsDialog(BuildContext context) async {
+    await showDialog<String>(
+        context: context,
+        builder: (BuildContext context) {
+          return ViewDetailsDialog(_todo);
         });
   }
 }
