@@ -33,6 +33,7 @@ class _AddEditTodoDialogState extends State<AddEditTodoDialog> {
     _isEditMode = widget.dialogMode == ManageTodoDialogMode.EDIT ? true : false;
     Todo todo = new Todo();
     todo.set('completed', false);
+    todo.set('items', ['asd', 'asdasd']);
     _todo = _isEditMode ? widget.todo : todo;
   }
 
@@ -64,15 +65,19 @@ class _AddEditTodoDialogState extends State<AddEditTodoDialog> {
     TextEditingController textEditingController;
 
     _todo.getFields().forEach((field) {
-      if (field.name == 'key') return;
+      var name = field.name;
+      var value = field.value;
 
-      if (field.type == FieldType.STRING) {
+      if (name.toLowerCase() == 'key') return;
+
+      if (value is String || value is int || value is double) {
         textEditingController = new TextEditingController();
         if (_isEditMode)
-        textEditingController.value =
-            TextEditingValue(text: _todo.get(field.name).toString());
+          textEditingController.value =
+              TextEditingValue(text: _todo.get(name).toString());
 
-        listTextInput.add(new EditTextField(textEditingController, 'Enter ' + field.name, (value) => _todo.set(field.name, value)));
+        listTextInput.add(new EditTextField(textEditingController,
+            'Enter ' + name, (value) => _todo.set(name, value)));
       }
 
       _textEditingControllers.add(textEditingController);

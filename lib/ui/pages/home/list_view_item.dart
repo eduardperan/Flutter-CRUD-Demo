@@ -31,11 +31,11 @@ class ListViewItem extends StatelessWidget {
             style: TextStyle(fontSize: 20.0),
           ),
           trailing: Wrap(
-            spacing: 8,
+            spacing: 0,
             children: <Widget>[
               IconButton(
                   icon: Icon(
-                    Icons.view_list,
+                    Icons.details,
                     color: Colors.black,
                     size: 20.0,
                   ),

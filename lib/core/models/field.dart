@@ -1,7 +1,8 @@
-import 'package:crud_app/constant.dart';
-
-class Field {
+class Field<T> {
   String name;
-  FieldType type;
-  Field(this.name, this.type);
+  T value;
+
+  Field(this.name, T value) {
+    this.value = value;
+  }
 }

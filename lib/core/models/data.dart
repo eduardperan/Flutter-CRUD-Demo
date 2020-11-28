@@ -1,38 +1,21 @@
 import 'package:crud_app/core/models/field.dart';
 import 'package:crud_app/core/interfaces/iform_field.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:crud_app/constant.dart';
 
 class Data implements IFormFiled {
-  Map<Field, Object> _fields;
+  List<Field> _fields;
 
-  Data(List<Field> fieldsArgs) {
-    fieldsArgs.add(new Field('key', FieldType.STRING));
-    this._fields =
-        Map.fromIterable(fieldsArgs, key: (f) => f, value: (v) => null);
+  Data(this._fields) {
+    this._fields.add(Field<String>('key', null));
   }
 
   Object get(String fieldName) {
-    return this
-        ._fields
-        .entries
-        .singleWhere((field) => field.key.name == fieldName)
-        .value;
+    return this._fields.firstWhere((field) => field.name == fieldName).value;
   }
 
   void set(String fieldName, Object newValue) {
-    this._fields = this._fields.map((key, value) {
-      if ((key.type == FieldType.BOOLEAN && newValue is bool) ||
-        (key.type == FieldType.STRING && newValue is String) ||
-        (key.type == FieldType.DATE && newValue is DateTime) ||
-        (key.type == FieldType.NUMBER && newValue is int) ||
-        (key.type == FieldType.LIST && newValue is List)
-      ){
-        return MapEntry(key, value = (key.name == fieldName) ? newValue : value);
-      } else {
-        return MapEntry(key, value);
-      }
-    });
+    this._fields.firstWhere((field) => field.name == fieldName).value =
+        newValue;
   }
 
   void fromSnapshot(DataSnapshot snapshot) {
@@ -43,13 +26,12 @@ class Data implements IFormFiled {
     });
   }
 
-  List<Field> getFields() => this._fields.keys.toList();
- 
+  List<Field> getFields() => this._fields;
+
   toJson() {
     Map<String, dynamic> data = {};
-    this._fields.forEach((key, value) {
-      if (key.name != 'key')
-        data.putIfAbsent(key.name, () => value);
+    this._fields.forEach((field) {
+      if (field.name != 'key') data.putIfAbsent(field.name, () => field.value);
     });
     return data;
   }

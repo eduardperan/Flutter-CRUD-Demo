@@ -64,7 +64,6 @@ class _HomePageState extends State<HomePage> {
   onEntryAdded(Event event) {
     Todo todo = new Todo();
     todo.fromSnapshot(event.snapshot);
-
     setState(() {
       _todoList.add(todo);
     });
