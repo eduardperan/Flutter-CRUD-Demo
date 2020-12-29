@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
   HomePage({Key key, this.auth, this.userId, this.logoutCallback})
       : super(key: key);
 
-  final BaseAuth auth;
+  final Auth auth;
   final VoidCallback logoutCallback;
   final String userId;
 

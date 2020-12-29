@@ -7,7 +7,7 @@ import 'package:crud_app/constant.dart';
 class App extends StatefulWidget {
   App({this.auth});
 
-  final BaseAuth auth;
+  final Auth auth;
 
   @override
   State<StatefulWidget> createState() => new _AppState();

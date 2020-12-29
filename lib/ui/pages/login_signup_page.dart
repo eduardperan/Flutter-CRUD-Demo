@@ -5,7 +5,7 @@ import 'package:crud_app/ui/widgets/circular_progress.dart';
 class LoginSignupPage extends StatefulWidget {
   LoginSignupPage({this.auth, this.loginCallback});
 
-  final BaseAuth auth;
+  final Auth auth;
   final VoidCallback loginCallback;
 
   @override
