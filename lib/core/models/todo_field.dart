@@ -2,10 +2,10 @@ import 'package:crud_app/core/models/field.dart';
 import 'package:crud_app/core/interfaces/iform_field.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-class Data implements IFormFiled {
+class TodoField implements IFormField {
   List<Field> _fields;
 
-  Data(this._fields) {
+  TodoField(this._fields) {
     this._fields.add(Field<String>('key', null));
   }
 

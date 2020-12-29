@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:crud_app/core/services/authentication.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:crud_app/core/models/todo.dart';
-import 'list_view_item.dart';
-import 'add_edit_todo_dialog/add_edit_todo_dialog.dart';
+import 'widgets/list_view_item.dart';
+import 'widgets/add_edit_todo_dialog/add_edit_todo_dialog.dart';
 import 'package:crud_app/constant.dart';
 import 'dart:async';
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:crud_app/core/interfaces/iform_field.dart';
 
 class ViewDetailsDialog extends StatelessWidget {
-  final IFormFiled _iFormFiled;
+  final IFormField _iFormFiled;
 
   ViewDetailsDialog(this._iFormFiled);
 
