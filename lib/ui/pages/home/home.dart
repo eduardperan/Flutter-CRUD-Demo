@@ -35,16 +35,16 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _todoList = new List();
-    _todoQuery = _database.reference().child("todo").child(widget.userId);
-    _onTodoAddedSubscription = _todoQuery.onChildAdded.listen(onEntryAdded);
-    _onTodoChangedSubscription =
-        _todoQuery.onChildChanged.listen(onEntryChanged);
+    // _todoQuery = _database.reference().child("todo").child(widget.userId);
+    // _onTodoAddedSubscription = _todoQuery.onChildAdded.listen(onEntryAdded);
+    // _onTodoChangedSubscription =
+    //     _todoQuery.onChildChanged.listen(onEntryChanged);
   }
 
   @override
   void dispose() {
-    _onTodoAddedSubscription.cancel();
-    _onTodoChangedSubscription.cancel();
+    // _onTodoAddedSubscription.cancel();
+    // _onTodoChangedSubscription.cancel();
     super.dispose();
   }
 
@@ -71,8 +71,9 @@ class _HomePageState extends State<HomePage> {
 
   signOut() async {
     try {
-      await widget.auth.signOut();
-      widget.logoutCallback();
+      Auth auth = new Auth();
+      await auth.signOut();
+      //widget.logoutCallback();
     } catch (e) {
       print(e);
     }

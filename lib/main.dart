@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:crud_app/core/services/authentication.dart';
-import 'package:crud_app/app.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:crud_app/my_app.dart';
+import 'package:crud_app/redux/middleware.dart';
+import 'package:crud_app/redux/app_state/app_state.dart';
 
-void main() {
-  runApp(new MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(renderApp());
 }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-        title: 'Flutter login demo',
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: new App(auth: new Auth()));
-  }
+Widget renderApp() {
+  return StoreProvider(
+    store: Store<AppState>(
+        appReducer,
+        initialState: AppState.initialState(),
+        middleware: createStoreMiddleware()
+      ),
+    child: new MyApp()
+  );
 }
