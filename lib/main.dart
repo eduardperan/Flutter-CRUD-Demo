@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:crud_app/my_app.dart';
+import 'package:crud_app/app.dart';
 import 'package:crud_app/redux/middleware.dart';
 import 'package:crud_app/redux/app_state/app_state.dart';
 
@@ -17,6 +17,6 @@ Widget renderApp() {
         initialState: AppState.initialState(),
         middleware: createStoreMiddleware()
       ),
-    child: new MyApp()
+    child: new App()
   );
 }

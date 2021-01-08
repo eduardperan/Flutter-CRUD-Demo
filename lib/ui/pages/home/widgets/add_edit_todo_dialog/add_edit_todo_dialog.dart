@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:crud_app/constant.dart';
 import 'package:crud_app/core/models/todo.dart';
-import './widgets/edit_text_field.dart';
+import 'widgets/widgets.dart';
 
 class AddEditTodoDialog extends StatefulWidget {
   AddEditTodoDialog(

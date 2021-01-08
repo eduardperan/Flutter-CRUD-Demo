@@ -19,9 +19,10 @@ class ProtectedRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AuthStatus>(
+      distinct: true,
       onInitialBuild: (AuthStatus authStatus) => _checkAuthStatus(context, authStatus),
       onDidChange: (AuthStatus authStatus) => _checkAuthStatus(context, authStatus),
-      converter: (Store<AppState> store) => authStatusSelector(store.state),
+      converter: (Store<AppState> store) => selectAuthStatus(store.state),
       builder: (BuildContext context, AuthStatus authStatus) {
         switch (authStatus) {
           case AuthStatus.LOGGED_IN:

@@ -5,18 +5,18 @@ import 'package:crud_app/core/interfaces/ibase_auth.dart';
 class Auth implements BaseAuth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  Future<String> signIn(String email, String password) async {
+  Future<FirebaseUser> signIn(String email, String password) async {
     AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = result.user;
-    return user.uid;
+    return user;
   }
 
-  Future<String> signUp(String email, String password) async {
+  Future<FirebaseUser> signUp(String email, String password) async {
     AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = result.user;
-    return user.uid;
+    return user;
   }
 
   Future<FirebaseUser> getCurrentUser() async {
