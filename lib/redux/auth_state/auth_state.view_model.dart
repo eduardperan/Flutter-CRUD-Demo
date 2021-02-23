@@ -11,7 +11,7 @@ class AuthStateViewModel {
   final bool isLoading;
   final bool isLoginForm;
   final String errorMessage;
-  final void Function(String) setAuthUserId;
+  final void Function(String) setUserId;
   final void Function(AuthStatus) setAuthStatus;
   final void Function(bool) setIsLoading;
   final void Function(bool) setIsLoginForm;
@@ -26,7 +26,7 @@ class AuthStateViewModel {
       this.isLoading,
       this.isLoginForm,
       this.errorMessage,
-      this.setAuthUserId,
+      this.setUserId,
       this.setAuthStatus,
       this.setIsLoading,
       this.setIsLoginForm,
@@ -74,7 +74,7 @@ class AuthStateViewModel {
         isLoading: selectIsLoading(store.state),
         isLoginForm: selectIsLoginForm(store.state),
         errorMessage: selectErrorMessage(store.state),
-        setAuthUserId: _setUserId,
+        setUserId: _setUserId,
         setAuthStatus: _setAuthStatus,
         setIsLoading: _setIsLoading,
         setIsLoginForm: _setIsLoginForm,

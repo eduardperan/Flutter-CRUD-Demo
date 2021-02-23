@@ -41,3 +41,5 @@ class SignUpUserAction {
   final VoidCallback callback;
   SignUpUserAction({@required this.email, @required this.password, this.callback});
 }
+
+class SignOutUserAction {}

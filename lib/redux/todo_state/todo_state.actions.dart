@@ -1,33 +1,43 @@
 import 'package:flutter/cupertino.dart';
-import 'package:crud_app/core/models/todo.dart';
+import 'package:crud_app/core/models/models.dart';
 
-class FetchTodosAction {}
+class FetchTodos {}
 
-class SetSelectedTodoAction {
+class SetSelectedTodo {
   final String todoId;
-  SetSelectedTodoAction(this.todoId);
+  SetSelectedTodo(this.todoId);
 }
 
-class SetIsLoadingAction {
-  final bool isLoading;
-  SetIsLoadingAction(this.isLoading);
+class SetIsFetchTodosLoading {
+  final bool isFetchTodosLoading;
+  SetIsFetchTodosLoading(this.isFetchTodosLoading);
 }
 
-class AddTodoAction {
+class SetIsTodoSaving {
+  final bool isTodoSaving;
+  SetIsTodoSaving(this.isTodoSaving);
+}
+
+class SetTodoErrorMessage {
+  final String todoErrorMessage;
+  SetTodoErrorMessage(this.todoErrorMessage);
+}
+
+class AddTodo {
   final Todo todo;
   final VoidCallback callback;
-  AddTodoAction({@required this.todo, this.callback});
+  AddTodo({@required this.todo, this.callback});
 }
 
-class UpdateTodoAction {
+class UpdateTodo {
   final String todoId;
   final Todo updateTodo;
   final VoidCallback callback;
-  UpdateTodoAction({@required this.todoId, this.updateTodo, this.callback});
+  UpdateTodo({@required this.todoId, this.updateTodo, this.callback});
 }
 
-class DeleteTodoAction {
+class DeleteTodo {
   final String todoId;
   final VoidCallback callback;
-  DeleteTodoAction({@required this.todoId, this.callback});
+  DeleteTodo({@required this.todoId, this.callback});
 }

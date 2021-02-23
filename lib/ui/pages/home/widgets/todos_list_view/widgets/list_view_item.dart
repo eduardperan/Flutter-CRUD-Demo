@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:crud_app/core/models/todo.dart';
 import 'package:crud_app/constant.dart';
-import './add_edit_todo_dialog/add_edit_todo_dialog.dart';
-import 'package:crud_app/ui/widgets/view_details_dialog.dart';
+import '../../add_edit_todo_dialog/add_edit_todo_dialog.dart';
+import '../../view_details_dialog.dart';
 
 class ListViewItem extends StatelessWidget {
-  final void Function(Todo todo) _toggleCompleteCallBack;
-  final void Function(String todoId, int index) _deleteTodoCallBack;
-  final Future<void> Function(Todo todo) _updateTodoCallBack;
   final Todo _todo;
   final int _index;
 
-  ListViewItem(this._todo, this._index, this._toggleCompleteCallBack,
-      this._deleteTodoCallBack, this._updateTodoCallBack);
+  ListViewItem(this._todo, this._index);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +19,7 @@ class ListViewItem extends StatelessWidget {
         key: Key(key),
         background: Container(color: Colors.red),
         onDismissed: (direction) {
-          _deleteTodoCallBack(key, _index);
+          //dispatch delete todo action
         },
         child: ListTile(
           title: Text(
@@ -60,7 +56,7 @@ class ListViewItem extends StatelessWidget {
                         )
                       : Icon(Icons.done, color: Colors.grey, size: 20.0),
                   onPressed: () {
-                    _toggleCompleteCallBack(_todo);
+                    //dispatch toggle todo completed action
                   }),
             ],
           ),
@@ -68,7 +64,7 @@ class ListViewItem extends StatelessWidget {
   }
 
   Future<void> updateTodo(Todo todo) async {
-    await _updateTodoCallBack(todo);
+    //dispatch update todo action
   }
 
   showEditTodoDialog(BuildContext context) async {

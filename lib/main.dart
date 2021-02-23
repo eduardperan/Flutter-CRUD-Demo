@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:crud_app/app.dart';
-import 'package:crud_app/redux/middleware.dart';
-import 'package:crud_app/redux/app_state/app_state.dart';
+import 'package:crud_app/redux/store.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,11 +10,7 @@ Future<void> main() async {
 
 Widget renderApp() {
   return StoreProvider(
-    store: Store<AppState>(
-        appReducer,
-        initialState: AppState.initialState(),
-        middleware: createStoreMiddleware()
-      ),
+    store: store,
     child: new App()
   );
 }

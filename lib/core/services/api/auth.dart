@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:crud_app/core/interfaces/ibase_auth.dart';
+import 'package:crud_app/core/interfaces/base_auth.dart';
 
-class Auth implements BaseAuth {
+class Auth implements BaseAuthApi {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Future<FirebaseUser> signIn(String email, String password) async {
